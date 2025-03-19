@@ -795,7 +795,7 @@ Would you like to ignore the error and continue?</source>
     <message>
         <location filename="../../src/citra_qt/configuration/configure_debug.ui" line="259"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"/>
+        <translation>Misceláneo</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/configuration/configure_debug.ui" line="265"/>
@@ -1215,7 +1215,7 @@ Would you like to ignore the error and continue?</source>
     <message>
         <location filename="../../src/citra_qt/configuration/configure_general.ui" line="63"/>
         <source>Check for updates</source>
-        <translation type="unfinished"/>
+        <translation>Buscar actualizaciones</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/configuration/configure_general.ui" line="73"/>
@@ -2750,7 +2750,7 @@ Would you like to ignore the error and continue?</source>
     <message>
         <location filename="../../src/citra_qt/configuration/configure_system.ui" line="470"/>
         <source>MAC:</source>
-        <translation type="unfinished"/>
+        <translation>Dirección MAC:</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/configuration/configure_system.ui" line="493"/>
@@ -3520,7 +3520,7 @@ Would you like to ignore the error and continue?</source>
         <location filename="../../src/citra_qt/configuration/configure_system.cpp" line="362"/>
         <location filename="../../src/citra_qt/configuration/configure_system.cpp" line="561"/>
         <source>MAC: %1</source>
-        <translation type="unfinished"/>
+        <translation>Dirección MAC: %1</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/configuration/configure_system.cpp" line="532"/>
@@ -4666,7 +4666,7 @@ Para ver una guía sobre cómo instalar FFmpeg, pulsa Ayuda.</translation>
     <message>
         <location filename="../../src/citra_qt/citra_qt.cpp" line="3631"/>
         <source>Update Available</source>
-        <translation type="unfinished"/>
+        <translation>Actualización disponible</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/citra_qt.cpp" line="3635"/>
@@ -4987,7 +4987,7 @@ This will delete the application if installed, as well as any installed updates 
     <message>
         <location filename="../../src/citra_qt/game_list.cpp" line="808"/>
         <source>Remove Application Directory</source>
-        <translation type="unfinished"/>
+        <translation>Quitar carpeta de aplicaciones</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/game_list.cpp" line="827"/>
@@ -5026,7 +5026,7 @@ This will delete the application if installed, as well as any installed updates 
         <location filename="../../src/citra_qt/game_list_p.h" line="268"/>
         <source>App functions flawless with no audio or graphical glitches, all tested functionality works as intended without
 any workarounds needed.</source>
-        <translation type="unfinished"/>
+        <translation>La aplicación funciona sin errores gráficos o de audio. Todas las funciones probadas funcionan según lo previso sin necesidad de soluciones alternativas.</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/game_list_p.h" line="269"/>
@@ -5037,7 +5037,7 @@ any workarounds needed.</source>
         <location filename="../../src/citra_qt/game_list_p.h" line="269"/>
         <source>App functions with minor graphical or audio glitches and is playable from start to finish. May require some
 workarounds.</source>
-        <translation type="unfinished"/>
+        <translation>La aplicación funciona con pequeños errores gráficos o de audio y es jugable de principio a fin. Puede necesitar soluciones alternativas.</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/game_list_p.h" line="270"/>
@@ -5048,7 +5048,7 @@ workarounds.</source>
         <location filename="../../src/citra_qt/game_list_p.h" line="270"/>
         <source>App functions with major graphical or audio glitches, but app is playable from start to finish with
 workarounds.</source>
-        <translation type="unfinished"/>
+        <translation>La aplicación funciona con grandes errores gráficos o de audio, pero es jugable de principio a fin con soluciones alternativas.</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/game_list_p.h" line="271"/>
@@ -5059,7 +5059,7 @@ workarounds.</source>
         <location filename="../../src/citra_qt/game_list_p.h" line="271"/>
         <source>App functions, but with major graphical or audio glitches. Unable to progress in specific areas due to glitches
 even with workarounds.</source>
-        <translation type="unfinished"/>
+        <translation>La aplicación funciona, pero con grandes errores gráficos o de audio. No es posible continuar tras ciertos puntos debido a errores, incluso con soluciones alternativas.</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/game_list_p.h" line="272"/>
@@ -5070,7 +5070,7 @@ even with workarounds.</source>
         <location filename="../../src/citra_qt/game_list_p.h" line="272"/>
         <source>App is completely unplayable due to major graphical or audio glitches. Unable to progress past the Start
 Screen.</source>
-        <translation type="unfinished"/>
+        <translation>La aplicación es completamente inutilizable debido a grandes errores gráficos o de audio. No es posible continuar tras la pantalla de título.</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/game_list_p.h" line="273"/>
@@ -5080,7 +5080,7 @@ Screen.</source>
     <message>
         <location filename="../../src/citra_qt/game_list_p.h" line="273"/>
         <source>The app crashes when attempting to startup.</source>
-        <translation type="unfinished"/>
+        <translation>La aplicación se cae cuando se intenta iniciar.</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/game_list_p.h" line="274"/>
@@ -5090,7 +5090,7 @@ Screen.</source>
     <message>
         <location filename="../../src/citra_qt/game_list_p.h" line="274"/>
         <source>The app has not yet been tested.</source>
-        <translation type="unfinished"/>
+        <translation>La aplicación no ha sido probada.</translation>
     </message>
 </context>
 <context>
@@ -5552,7 +5552,7 @@ Screen.</source>
     <message>
         <location filename="../../src/citra_qt/multiplayer/host_room.ui" line="51"/>
         <source>Preferred Application</source>
-        <translation type="unfinished"/>
+        <translation>Aplicación preferida</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/multiplayer/host_room.ui" line="61"/>
@@ -5567,7 +5567,7 @@ Screen.</source>
     <message>
         <location filename="../../src/citra_qt/multiplayer/host_room.ui" line="101"/>
         <source>(Leave blank for open room)</source>
-        <translation type="unfinished"/>
+        <translation>(Dejar vacío para sala pública)</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/multiplayer/host_room.ui" line="118"/>
@@ -5805,7 +5805,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/multiplayer/lobby.ui" line="76"/>
         <source>Applications I Own</source>
-        <translation type="unfinished"/>
+        <translation>Mis aplicaciones</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/multiplayer/lobby.ui" line="83"/>
@@ -5840,7 +5840,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/multiplayer/lobby.cpp" line="200"/>
         <source>Preferred Application</source>
-        <translation type="unfinished"/>
+        <translation>Aplicación preferida</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/multiplayer/lobby.cpp" line="202"/>
@@ -5868,12 +5868,12 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="14"/>
         <source>Azahar</source>
-        <translation type="unfinished"/>
+        <translation>Azahar</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="53"/>
         <source>File</source>
-        <translation type="unfinished"/>
+        <translation>Archivo</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="57"/>
@@ -5893,7 +5893,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="96"/>
         <source>Emulation</source>
-        <translation type="unfinished"/>
+        <translation>Emulación</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="100"/>
@@ -5908,7 +5908,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="124"/>
         <source>View</source>
-        <translation type="unfinished"/>
+        <translation>Vista</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="128"/>
@@ -5943,7 +5943,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="212"/>
         <source>Help</source>
-        <translation type="unfinished"/>
+        <translation>Ayuda</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="230"/>
@@ -5963,7 +5963,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="245"/>
         <source>Set Up System Files...</source>
-        <translation type="unfinished"/>
+        <translation>Configurar Archivos de Sistema...</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="250"/>
@@ -6003,17 +6003,17 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="285"/>
         <source>Exit</source>
-        <translation type="unfinished"/>
+        <translation>Salir</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="293"/>
         <source>Pause</source>
-        <translation type="unfinished"/>
+        <translation>Pausa</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="301"/>
         <source>Stop</source>
-        <translation type="unfinished"/>
+        <translation>Detener</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="309"/>
@@ -6033,7 +6033,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="327"/>
         <source>About Azahar</source>
-        <translation type="unfinished"/>
+        <translation>Acerca de Azahar</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="338"/>
@@ -6118,7 +6118,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="454"/>
         <source>Browse Public Rooms</source>
-        <translation type="unfinished"/>
+        <translation>Buscar salas públicas</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="462"/>
@@ -6153,7 +6153,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="499"/>
         <source>Opens the Azahar Log folder</source>
-        <translation type="unfinished"/>
+        <translation>Abrir carpeta de logs de Azahar</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="507"/>
@@ -6263,12 +6263,12 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="669"/>
         <source>Open Azahar Folder</source>
-        <translation type="unfinished"/>
+        <translation>Abrir carpeta de Azahar</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/main.ui" line="677"/>
         <source>Configure Current Application...</source>
-        <translation type="unfinished"/>
+        <translation>Configurar aplicación actual...</translation>
     </message>
 </context>
 <context>
@@ -6354,7 +6354,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/movie/movie_play_dialog.ui" line="57"/>
         <source>Application:</source>
-        <translation type="unfinished"/>
+        <translation>Aplicación:</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/movie/movie_play_dialog.ui" line="71"/>
@@ -6374,7 +6374,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/movie/movie_play_dialog.cpp" line="32"/>
         <source>Current running application will be stopped.</source>
-        <translation type="unfinished"/>
+        <translation>La aplicación actual se detendrá.</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/movie/movie_play_dialog.cpp" line="34"/>
@@ -6446,7 +6446,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/movie/movie_record_dialog.cpp" line="27"/>
         <source>Current running application will be restarted.</source>
-        <translation type="unfinished"/>
+        <translation>La aplicación actual se reiniciará.</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/movie/movie_record_dialog.cpp" line="29"/>
@@ -6456,7 +6456,7 @@ Mensaje de depuración:</translation>
     <message>
         <location filename="../../src/citra_qt/movie/movie_record_dialog.cpp" line="32"/>
         <source>Recording will start once you boot an application.</source>
-        <translation type="unfinished"/>
+        <translation>La grabación empezará cuando inicies una aplicación.</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/movie/movie_record_dialog.cpp" line="50"/>
@@ -6862,7 +6862,7 @@ Puede que haya dejado la sala.</translation>
     <message>
         <location filename="../../src/citra_qt/game_list_p.h" line="451"/>
         <source>Add New Application Directory</source>
-        <translation type="unfinished"/>
+        <translation>Agregar nueva carpeta de aplicaciones</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/game_list_p.h" line="473"/>
@@ -6872,17 +6872,17 @@ Puede que haya dejado la sala.</translation>
     <message>
         <location filename="../../src/citra_qt/multiplayer/chat_room.cpp" line="134"/>
         <source>Not running an application</source>
-        <translation type="unfinished"/>
+        <translation>Sin ejecutar una aplicación</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/multiplayer/lobby_p.h" line="256"/>
         <source>%1 is not running an application</source>
-        <translation type="unfinished"/>
+        <translation>%1 no está ejecutando una aplicación</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/multiplayer/lobby_p.h" line="258"/>
         <source>%1 is running %2</source>
-        <translation type="unfinished"/>
+        <translation>%1 está ejecutando %2</translation>
     </message>
 </context>
 <context>
@@ -7082,7 +7082,8 @@ Puede que haya dejado la sala.</translation>
         <location filename="../../src/citra_qt/user_data_migration.cpp" line="30"/>
         <source>Would you like to migrate your data for use in Azahar?
 (This may take a while; The old data will not be deleted)</source>
-        <translation type="unfinished"/>
+        <translation>¿Quieres migrar tus datos para usarlos en Azahar?
+(Esto podría demorar. Los datos originales no se borrarán)</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/user_data_migration.cpp" line="39"/>
@@ -7091,44 +7092,50 @@ Puede que haya dejado la sala.</translation>
         <location filename="../../src/citra_qt/user_data_migration.cpp" line="95"/>
         <location filename="../../src/citra_qt/user_data_migration.cpp" line="134"/>
         <source>Migration</source>
-        <translation type="unfinished"/>
+        <translation>Migración</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/user_data_migration.cpp" line="41"/>
         <source>Azahar has detected user data for Citra and Lime3DS.
 
 </source>
-        <translation type="unfinished"/>
+        <translation>Azahar ha detectado datos de usuario de Citra y Lime3DS
+</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/user_data_migration.cpp" line="46"/>
         <source>Migrate from Lime3DS</source>
-        <translation type="unfinished"/>
+        <translation>Migrar desde Lime3DS</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/user_data_migration.cpp" line="48"/>
         <source>Migrate from Citra</source>
-        <translation type="unfinished"/>
+        <translation>Migrar desde Citra</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/user_data_migration.cpp" line="66"/>
         <source>Azahar has detected user data for Citra.
 
 </source>
-        <translation type="unfinished"/>
+        <translation>Azahar ha detectado datos de usuario de Citra
+
+</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/user_data_migration.cpp" line="77"/>
         <source>Azahar has detected user data for Lime3DS.
 
 </source>
-        <translation type="unfinished"/>
+        <translation>Azahar ha detectado datos de usuario de Lime3DS
+
+</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/user_data_migration.cpp" line="97"/>
         <source>You can manually re-trigger this prompt by deleting the new user data directory:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Podrás volver a realizar este proceso eliminando la nueva carpeta de datos de usuario:
+%1</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/user_data_migration.cpp" line="136"/>
@@ -7136,7 +7143,10 @@ Puede que haya dejado la sala.</translation>
 
 If you wish to clean up the files which were left in the old data location, you can do so by deleting the following directory:
 %1</source>
-        <translation type="unfinished"/>
+        <translation>Los datos fueron migrados de forma exitosa.
+
+Si deseas limpiar los archivos que quedaron en la ruta original, puedes hacerlo borrando la siguiente carpeta:
+%1</translation>
     </message>
 </context>
 <context>
