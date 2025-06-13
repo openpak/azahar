@@ -726,8 +726,8 @@ Desideri ignorare l&apos;errore e continuare?</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/configuration/configure_debug.ui" line="107"/>
-        <source>Show Log Console (Windows Only)</source>
-        <translation>Mostra console di log (solo su Windows)</translation>
+        <source>Show log output in console</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/configuration/configure_debug.ui" line="114"/>
@@ -822,7 +822,7 @@ Desideri ignorare l&apos;errore e continuare?</translation>
     <message>
         <location filename="../../src/citra_qt/configuration/configure_debug.ui" line="285"/>
         <source>Enable RPC server</source>
-        <translation type="unfinished"></translation>
+        <translation>Abilita il server RPC</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/configuration/configure_debug.ui" line="288"/>
@@ -3849,7 +3849,7 @@ Trascina i punti per cambiarne la posizione, o fai doppio clic sulla tabella per
     <message>
         <location filename="../../src/citra_qt/configuration/configure_ui.ui" line="213"/>
         <source>Status Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barra di stato</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/configuration/configure_ui.ui" line="221"/>

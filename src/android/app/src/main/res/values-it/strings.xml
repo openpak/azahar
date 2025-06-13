@@ -79,6 +79,7 @@ Divertiti usando l\'emulatore!</string>
     <string name="permission_denied">Permesso negato</string>
     <string name="add_games_warning">Saltare la selezione della cartella applicazioni?</string>
     <string name="add_games_warning_description">Non verrà mostrato alcun software nella lista applicazioni se non viene selezionata alcuna cartella.</string>
+    <string name="permissions">Permessi</string>
     <string name="warning_help">Aiuto</string>
     <string name="warning_skip">Salta</string>
     <string name="warning_cancel">Indietro</string>
