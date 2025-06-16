@@ -4723,7 +4723,7 @@ Per istruzioni su come installare FFmpeg, clicca su Aiuto.</translation>
     <message>
         <location filename="../../src/citra_qt/citra_qt.cpp" line="3235"/>
         <source>Frame: %1 ms (GPU: %2 ms, IPC: %3 ms, SVC: %4 ms, Rem: %5 ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>Frame: %1 ms (GPU: %2 ms, IPC: %3 ms, SVC: %4 ms, Rem: %5 ms)</translation>
     </message>
     <message>
         <location filename="../../src/citra_qt/citra_qt.cpp" line="3243"/>
