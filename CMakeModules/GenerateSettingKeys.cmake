@@ -16,6 +16,7 @@ foreach(KEY IN ITEMS
     "enable_required_online_lle_modules"
     "use_virtual_sd"
     "use_custom_storage"
+    "use_openpak_network"
     "compress_cia_installs"
     "async_fs_operations"
     "region_value"
