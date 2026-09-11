@@ -31,7 +31,71 @@ jobs:
         with:
           name: azahar-openpak-linux-x86_64
           path: artifacts/
-      - if: startsWith(github.ref, 'refs/tags/openpak-v')
-        run: gh release create "${GITHUB_REF_NAME}" artifacts/* --repo "${GITHUB_REPOSITORY}" --title "Azahar ${GITHUB_REF_NAME} (OpenPak)" --generate-notes
+  macos:
+    runs-on: macos-14
+    env:
+      OS: macos
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - run: brew install ccache ninja spirv-tools
+      - run: BUILD_ARCH=arm64 ./.ci/macos.sh
+      - run: BUILD_ARCH=x86_64 ./.ci/macos.sh
+      - run: ./.ci/macos-universal.sh
+      - run: |
+          mkdir -p artifacts && cd build/universal/bundle && zip -r -y ../../../artifacts/azahar-openpak-${GITHUB_REF_NAME}-macos-universal.zip . && ls -la ../../../artifacts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: azahar-openpak-macos
+          path: artifacts/
+  windows:
+    runs-on: ubuntu-latest
+    container:
+      image: opensauce04/azahar-build-environment:latest
+      options: -u 1001
+    env:
+      OS: windows
+      TARGET: mxe
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - run: ./.ci/mxe.sh
+      - run: |
+          mkdir -p artifacts && cd build/bundle && zip -r ../../artifacts/azahar-openpak-${GITHUB_REF_NAME}-windows-x86_64.zip . && ls -la ../../artifacts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: azahar-openpak-windows
+          path: artifacts/
+  android:
+    runs-on: ubuntu-latest
+    env:
+      OS: android
+      TARGET: vanilla
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - run: echo "y" | ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager "cmake;3.30.3"
+      - run: JAVA_HOME=$JAVA_HOME_17_X64 ./.ci/android.sh
+      - run: |
+          mkdir -p artifacts && f=$(find src/android/app/build/outputs/apk -name '*.apk' | head -1) && cp "$f" artifacts/azahar-openpak-${GITHUB_REF_NAME}-android.apk && ls -la artifacts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: azahar-openpak-android
+          path: artifacts/
+  release:
+    needs: [linux, macos, windows, android]
+    if: startsWith(github.ref, 'refs/tags/openpak-v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - run: gh release create "${GITHUB_REF_NAME}" artifacts/* --repo "${GITHUB_REPOSITORY}" --title "Azahar ${GITHUB_REF_NAME} (OpenPak)" --generate-notes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
