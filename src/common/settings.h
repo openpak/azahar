@@ -495,6 +495,8 @@ struct Values {
     // Data Storage
     Setting<bool> use_virtual_sd{true, Keys::use_virtual_sd};
     Setting<bool> use_custom_storage{false, Keys::use_custom_storage};
+    // OpenPak: map the Nintendo Network hostnames the 3DS uses to their openpak.org twins.
+    Setting<bool> use_openpak_network{false, Keys::use_openpak_network};
     Setting<bool> compress_cia_installs{false, Keys::compress_cia_installs};
     Setting<bool> async_fs_operations{true, Keys::async_fs_operations};
 
