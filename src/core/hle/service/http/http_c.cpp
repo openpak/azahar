@@ -26,6 +26,7 @@
 #include "core/hle/kernel/ipc.h"
 #include "core/hle/romfs.h"
 #include "core/hle/service/fs/archive.h"
+#include "common/settings.h"
 #include "core/hle/service/http/http_c.h"
 #include "core/hw/aes/key.h"
 
@@ -396,6 +397,33 @@ void Context::MakeRequest() {
     request.path = url_info.path;
 
     // Apply URL replacements if any
+    if (Settings::values.use_openpak_network.GetValue()) {
+        // OpenPak: same names on openpak.org; the server answers both the Nintendo and these.
+        static const std::pair<const char*, const char*> openpak_hosts[] = {
+            {"account.nintendo.net", "account.openpak.org"},
+            {"nasc.nintendowifi.net", "nasc.openpak.org"},
+            {"conntest.nintendowifi.net", "conntest.openpak.org"},
+            {"cbvc.cdn.nintendo.net", "cbvc.cdn.openpak.org"},
+            {"discovery.olv.nintendo.net", "discovery.olv.openpak.org"},
+            {"api.olv.nintendo.net", "api.olv.openpak.org"},
+            {"ctr.olv.nintendo.net", "ctr.olv.openpak.org"},
+            {"npts.app.nintendowifi.net", "npts.app.openpak.org"},
+            {"npdi.cdn.nintendowifi.net", "npdi.cdn.openpak.org"},
+            {"npdl.cdn.nintendowifi.net", "npdl.cdn.openpak.org"},
+            {"nppl.app.nintendowifi.net", "nppl.app.openpak.org"},
+            {"npfl.c.app.nintendowifi.net", "npfl.c.app.openpak.org"},
+            {"ecs.c.shop.nintendowifi.net", "ecs.c.shop.openpak.org"},
+            {"nus.c.shop.nintendowifi.net", "nus.c.shop.openpak.org"},
+            {"ias.c.shop.nintendowifi.net", "ias.c.shop.openpak.org"},
+            {"ccs.c.shop.nintendowifi.net", "ccs.c.shop.openpak.org"},
+        };
+        for (const auto& [from, to] : openpak_hosts) {
+            if (url_info.host == from) {
+                url_info.host = to;
+                break;
+            }
+        }
+    }
     url_info.host = url_replacer->Apply(url_info.host);
 
     request.progress = [this](u64, u64 total) -> bool {

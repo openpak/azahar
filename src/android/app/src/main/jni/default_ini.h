@@ -14,6 +14,7 @@ namespace DefaultINI {
 constexpr std::array android_config_omitted_keys = {
     Settings::Keys::enable_gamemode,
     Settings::Keys::use_custom_storage,
+    Settings::Keys::use_openpak_network,
     Settings::Keys::init_time_offset,
     Settings::Keys::physical_device,
     Settings::Keys::use_gles, // Niche
