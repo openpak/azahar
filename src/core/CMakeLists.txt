@@ -42,6 +42,8 @@ add_library(citra_core STATIC EXCLUDE_FROM_ALL
     dumping/backend.h
     dumping/ffmpeg_backend.cpp
     dumping/ffmpeg_backend.h
+    openpak_profile.cpp
+    openpak_profile.h
     file_sys/archive_artic.cpp
     file_sys/archive_artic.h
     file_sys/archive_backend.cpp
@@ -506,6 +508,8 @@ create_target_directory_groups(citra_core)
 
 target_link_libraries(citra_core PUBLIC citra_common PRIVATE audio_core network video_core)
 target_link_libraries(citra_core PRIVATE Boost::boost Boost::serialization Boost::iostreams httplib)
+# OpenPak: the network profile is parsed with the bundled single-header nlohmann/json.
+target_include_directories(citra_core PRIVATE ${PROJECT_SOURCE_DIR}/externals/json)
 target_link_libraries(citra_core PUBLIC dds-ktx PRIVATE cryptopp fmt lodepng open_source_archives)
 
 if (ENABLE_WEB_SERVICE)

@@ -12,6 +12,7 @@
 #include "common/logging/log.h"
 #include "common/scope_exit.h"
 #include "common/settings.h"
+#include "core/openpak_profile.h"
 #include "core/arm/arm_interface.h"
 #include "core/arm/exclusive_monitor.h"
 #include "core/hle/service/cam/cam.h"
@@ -521,6 +522,12 @@ void System::Reschedule() {
 System::ResultStatus System::Init(Frontend::EmuWindow& emu_window,
                                   Frontend::EmuWindow* secondary_window,
                                   Kernel::MemoryMode memory_mode, u32 num_cores) {
+    // OpenPak: one conditional GET for the network profile at boot (perds/emulator-network-
+    // profile-prd.md §2). Two seconds, best-effort; the compiled-in host map applies until a
+    // profile lands, and a game starts either way.
+    if (Settings::values.use_openpak_network.GetValue()) {
+        OpenPakProfile::FetchAtLaunch();
+    }
     // Notification for system initialization (either boot or savestate).
     if (on_init_callback) {
         on_init_callback(true);
