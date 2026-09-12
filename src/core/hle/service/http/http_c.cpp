@@ -29,6 +29,7 @@
 #include "common/settings.h"
 #include "core/hle/service/http/http_c.h"
 #include "core/hw/aes/key.h"
+#include "core/openpak_profile.h"
 
 SERIALIZE_EXPORT_IMPL(Service::HTTP::HTTP_C)
 SERIALIZE_EXPORT_IMPL(Service::HTTP::SessionData)
@@ -398,29 +399,37 @@ void Context::MakeRequest() {
 
     // Apply URL replacements if any
     if (Settings::values.use_openpak_network.GetValue()) {
-        // OpenPak: same names on openpak.org; the server answers both the Nintendo and these.
-        static const std::pair<const char*, const char*> openpak_hosts[] = {
-            {"account.nintendo.net", "account.openpak.org"},
-            {"nasc.nintendowifi.net", "nasc.openpak.org"},
-            {"conntest.nintendowifi.net", "conntest.openpak.org"},
-            {"cbvc.cdn.nintendo.net", "cbvc.cdn.openpak.org"},
-            {"discovery.olv.nintendo.net", "discovery.olv.openpak.org"},
-            {"api.olv.nintendo.net", "api.olv.openpak.org"},
-            {"ctr.olv.nintendo.net", "ctr.olv.openpak.org"},
-            {"npts.app.nintendowifi.net", "npts.app.openpak.org"},
-            {"npdi.cdn.nintendowifi.net", "npdi.cdn.openpak.org"},
-            {"npdl.cdn.nintendowifi.net", "npdl.cdn.openpak.org"},
-            {"nppl.app.nintendowifi.net", "nppl.app.openpak.org"},
-            {"npfl.c.app.nintendowifi.net", "npfl.c.app.openpak.org"},
-            {"ecs.c.shop.nintendowifi.net", "ecs.c.shop.openpak.org"},
-            {"nus.c.shop.nintendowifi.net", "nus.c.shop.openpak.org"},
-            {"ias.c.shop.nintendowifi.net", "ias.c.shop.openpak.org"},
-            {"ccs.c.shop.nintendowifi.net", "ccs.c.shop.openpak.org"},
-        };
-        for (const auto& [from, to] : openpak_hosts) {
-            if (url_info.host == from) {
-                url_info.host = to;
-                break;
+        // OpenPak: the applied network profile decides which names are answered on
+        // openpak.org (prds/emulator-network-profile-prd.md §4e). When nothing was fetched,
+        // the compiled-in map is the truth; when a profile is applied, names it marked
+        // `never` or did not claim are left alone.
+        std::string mapped_host = OpenPakProfile::MapHost(url_info.host);
+        if (!mapped_host.empty()) {
+            url_info.host = std::move(mapped_host);
+        } else if (!OpenPakProfile::Current().fetched) {
+            static const std::pair<const char*, const char*> openpak_hosts[] = {
+                {"account.nintendo.net", "account.openpak.org"},
+                {"nasc.nintendowifi.net", "nasc.openpak.org"},
+                {"conntest.nintendowifi.net", "conntest.openpak.org"},
+                {"cbvc.cdn.nintendo.net", "cbvc.cdn.openpak.org"},
+                {"discovery.olv.nintendo.net", "discovery.olv.openpak.org"},
+                {"api.olv.nintendo.net", "api.olv.openpak.org"},
+                {"ctr.olv.nintendo.net", "ctr.olv.openpak.org"},
+                {"npts.app.nintendowifi.net", "npts.app.openpak.org"},
+                {"npdi.cdn.nintendowifi.net", "npdi.cdn.openpak.org"},
+                {"npdl.cdn.nintendowifi.net", "npdl.cdn.openpak.org"},
+                {"nppl.app.nintendowifi.net", "nppl.app.openpak.org"},
+                {"npfl.c.app.nintendowifi.net", "npfl.c.app.openpak.org"},
+                {"ecs.c.shop.nintendowifi.net", "ecs.c.shop.openpak.org"},
+                {"nus.c.shop.nintendowifi.net", "nus.c.shop.openpak.org"},
+                {"ias.c.shop.nintendowifi.net", "ias.c.shop.openpak.org"},
+                {"ccs.c.shop.nintendowifi.net", "ccs.c.shop.openpak.org"},
+            };
+            for (const auto& [from, to] : openpak_hosts) {
+                if (url_info.host == from) {
+                    url_info.host = to;
+                    break;
+                }
             }
         }
     }
