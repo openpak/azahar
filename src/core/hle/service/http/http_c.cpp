@@ -400,7 +400,7 @@ void Context::MakeRequest() {
     // Apply URL replacements if any
     if (Settings::values.use_openpak_network.GetValue()) {
         // OpenPak: the applied network profile decides which names are answered on
-        // openpak.org (prds/emulator-network-profile-prd.md §4e). When nothing was fetched,
+        // openpak.org (emulators/prds/emulator-network-profile-prd.md §4e). When nothing was fetched,
         // the compiled-in map is the truth; when a profile is applied, names it marked
         // `never` or did not claim are left alone.
         std::string mapped_host = OpenPakProfile::MapHost(url_info.host);

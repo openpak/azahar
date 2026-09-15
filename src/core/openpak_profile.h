@@ -1,4 +1,4 @@
-// OpenPak: the applied network profile (prds/emulator-network-profile-prd.md §4e).
+// OpenPak: the applied network profile (emulators/prds/emulator-network-profile-prd.md §4e).
 // One conditional GET per launch; the fetched profile's redirect lists replace the host map
 // http_c ships with. Never blocks a game on the network: last-known-good beats a fetch, and
 // the compiled-in map beats nothing.

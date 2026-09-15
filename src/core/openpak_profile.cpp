@@ -65,7 +65,7 @@ std::string ToLower(std::string s) {
     return s;
 }
 
-// The compiled-in ceiling (prds/emulator-network-profile-prd.md §3): the families this
+// The compiled-in ceiling (emulators/prds/emulator-network-profile-prd.md §3): the families this
 // emulator will ever rewrite. The profile chooses within them; anything outside rejects the
 // whole profile.
 const std::vector<std::string>& AllowedFamilies() {
