@@ -522,9 +522,9 @@ void System::Reschedule() {
 System::ResultStatus System::Init(Frontend::EmuWindow& emu_window,
                                   Frontend::EmuWindow* secondary_window,
                                   Kernel::MemoryMode memory_mode, u32 num_cores) {
-    // OpenPak: one conditional GET for the network profile at boot (perds/emulator-network-
-    // profile-prd.md §2). Two seconds, best-effort; the compiled-in host map applies until a
-    // profile lands, and a game starts either way.
+    // OpenPak: one conditional GET for the network profile at boot (emulators/prds/emulator-
+    // network-profile-prd.md §2), off this thread: the last-known-good or compiled-in host map
+    // applies until the profile lands, and the game never waits for it.
     if (Settings::values.use_openpak_network.GetValue()) {
         OpenPakProfile::FetchAtLaunch();
     }

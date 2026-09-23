@@ -89,6 +89,8 @@ add_library(citra_qt STATIC EXCLUDE_FROM_ALL
     configuration/configure_ui.h
     configuration/configure_ui.ui
     configuration/configure_network.cpp
+    configuration/configure_openpak.cpp
+    configuration/configure_openpak.h
     configuration/configure_network.h
     configuration/configure_network.ui
     configuration/configure_cheats.cpp
@@ -180,6 +182,8 @@ add_library(citra_qt STATIC EXCLUDE_FROM_ALL
     multiplayer/state.h
     multiplayer/validation.h
     notification_led.cpp
+    openpak_host.cpp
+    openpak_host.h
     notification_led.h
     precompiled_headers.h
     qt_image_interface.cpp
@@ -299,6 +303,8 @@ create_target_directory_groups(citra_qt)
 target_link_libraries(citra_qt PRIVATE audio_core citra_common citra_core input_common network video_core)
 target_link_libraries(citra_qt PRIVATE Boost::boost nihstro-headers Qt6::Widgets Qt6::Multimedia Qt6::Concurrent)
 target_link_libraries(citra_qt PRIVATE ${PLATFORM_LIBRARIES} Threads::Threads)
+# OpenPak: the client library and its Qt window and dialogs (externals/openpak-client).
+target_link_libraries(citra_qt PRIVATE openpak::qt json-headers)
 
 if (MINGW)
     target_link_libraries(citra_qt PRIVATE dwmapi)

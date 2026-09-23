@@ -23,8 +23,5 @@ public:
     void SetConfiguration();
 
 private:
-    // OpenPak: which network profile is in effect (fetched / cached / built-in).
-    void UpdateOpenPakProfileStatus();
-
     std::unique_ptr<Ui::ConfigureWeb> ui;
 };

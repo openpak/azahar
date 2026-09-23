@@ -16,6 +16,7 @@
 #include "citra_qt/configuration/configure_input.h"
 #include "citra_qt/configuration/configure_layout.h"
 #include "citra_qt/configuration/configure_network.h"
+#include "citra_qt/configuration/configure_openpak.h"
 #include "citra_qt/configuration/configure_storage.h"
 #include "citra_qt/configuration/configure_system.h"
 #include "citra_qt/configuration/configure_ui.h"
@@ -42,7 +43,9 @@ ConfigureDialog::ConfigureDialog(QWidget* parent, HotkeyRegistry& registry_, Cor
       camera_tab{std::make_unique<ConfigureCamera>(this)},
       debug_tab{std::make_unique<ConfigureDebug>(is_powered_on, this)},
       storage_tab{std::make_unique<ConfigureStorage>(is_powered_on, this)},
-      web_tab{std::make_unique<ConfigureWeb>(this)}, ui_tab{std::make_unique<ConfigureUi>(this)} {
+      web_tab{std::make_unique<ConfigureWeb>(this)},
+      openpak_tab{std::make_unique<ConfigureOpenPak>(is_powered_on, this)},
+      ui_tab{std::make_unique<ConfigureUi>(this)} {
     Settings::SetConfiguringGlobal(true);
 
     ui->setupUi(this);
@@ -60,6 +63,7 @@ ConfigureDialog::ConfigureDialog(QWidget* parent, HotkeyRegistry& registry_, Cor
     ui->tabWidget->addTab(debug_tab.get(), tr("Debug"));
     ui->tabWidget->addTab(storage_tab.get(), tr("Storage"));
     ui->tabWidget->addTab(web_tab.get(), tr("Network"));
+    ui->tabWidget->addTab(openpak_tab.get(), tr("OpenPak"));
     ui->tabWidget->addTab(ui_tab.get(), tr("UI"));
 
     hotkeys_tab->Populate(registry);
@@ -97,6 +101,7 @@ void ConfigureDialog::SetConfiguration() {
     camera_tab->SetConfiguration();
     debug_tab->SetConfiguration();
     web_tab->SetConfiguration();
+    openpak_tab->SetConfiguration();
     ui_tab->SetConfiguration();
     storage_tab->SetConfiguration();
 }
@@ -115,6 +120,7 @@ void ConfigureDialog::ApplyConfiguration() {
     camera_tab->ApplyConfiguration();
     debug_tab->ApplyConfiguration();
     web_tab->ApplyConfiguration();
+    openpak_tab->ApplyConfiguration();
     ui_tab->ApplyConfiguration();
     storage_tab->ApplyConfiguration();
     system.ApplySettings();
@@ -127,7 +133,8 @@ void ConfigureDialog::PopulateSelectionList() {
     ui->selectorList->clear();
 
     const std::array<std::pair<QString, QList<QWidget*>>, 5> items{
-        {{tr("General"), {general_tab.get(), web_tab.get(), debug_tab.get(), ui_tab.get()}},
+        {{tr("General"),
+          {general_tab.get(), web_tab.get(), openpak_tab.get(), debug_tab.get(), ui_tab.get()}},
          {tr("System"), {system_tab.get(), camera_tab.get(), storage_tab.get()}},
          {tr("Graphics"), {enhancements_tab.get(), layout_tab.get(), graphics_tab.get()}},
          {tr("Audio"), {audio_tab.get()}},
@@ -170,6 +177,7 @@ void ConfigureDialog::RetranslateUI() {
     camera_tab->RetranslateUI();
     debug_tab->RetranslateUI();
     web_tab->RetranslateUI();
+    openpak_tab->RetranslateUI();
     ui_tab->RetranslateUI();
     storage_tab->RetranslateUI();
 }
@@ -193,6 +201,7 @@ void ConfigureDialog::UpdateVisibleTabs() {
         {debug_tab.get(), tr("Debug")},
         {storage_tab.get(), tr("Storage")},
         {web_tab.get(), tr("Network")},
+        {openpak_tab.get(), tr("OpenPak")},
         {ui_tab.get(), tr("UI")}};
 
     ui->tabWidget->clear();
@@ -201,4 +210,10 @@ void ConfigureDialog::UpdateVisibleTabs() {
 
     for (const auto tab : tabs)
         ui->tabWidget->addTab(tab, widgets.at(tab));
+}
+
+void ConfigureDialog::ShowOpenPakTab() {
+    // The OpenPak tab sits in the General group, after Network.
+    ui->selectorList->setCurrentRow(0);
+    ui->tabWidget->setCurrentWidget(openpak_tab.get());
 }

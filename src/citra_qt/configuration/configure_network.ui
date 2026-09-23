@@ -53,27 +53,6 @@
       <item>
        <widget class="QLineEdit" name="token_lineedit"/>
       </item>
-      <item>
-       <layout class="QHBoxLayout" name="openpak_profile_layout">
-        <item>
-        <widget class="QPushButton" name="openpak_profile_refresh">
-         <property name="toolTip">
-          <string>Re-fetch OpenPak's network profile (which names are answered on openpak.org). Games do this once per launch.</string>
-         </property>
-         <property name="text">
-          <string>Refresh OpenPak network settings</string>
-         </property>
-        </widget>
-        </item>
-        <item>
-        <widget class="QLabel" name="openpak_profile_status">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-        </item>
-       </layout>
-      </item>
      </layout>
     </widget>
    </item>
