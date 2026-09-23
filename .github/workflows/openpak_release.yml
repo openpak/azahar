@@ -80,6 +80,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+      # .ci/android.sh ends with `ccache -s`; the hosted image has no ccache.
+      - run: sudo apt-get update && sudo apt-get install -y ccache
       - run: echo "y" | ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager "cmake;3.30.3"
       - run: JAVA_HOME=$JAVA_HOME_17_X64 ./.ci/android.sh
       - run: |
