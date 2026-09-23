@@ -17,6 +17,7 @@ object SettingKeys {
     external fun deterministic_async_operations(): String
     external fun enable_required_online_lle_modules(): String
     external fun use_virtual_sd(): String
+    external fun use_openpak_network(): String
     external fun compress_cia_installs(): String
     external fun async_fs_operations(): String
     external fun region_value(): String
@@ -148,4 +149,6 @@ object SettingKeys {
     external fun performance_overlay_position(): String
     external fun enable_secondary_display(): String
     external fun combo_button_buttons(): String
+    external fun openpak_cloud_sync(): String
+    external fun openpak_notifications(): String
 }
