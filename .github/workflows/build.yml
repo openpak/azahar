@@ -35,6 +35,7 @@ jobs:
         with:
           name: source
           path: artifacts/
+          retention-days: 3
       - name: Attest artifacts
         if: ${{ github.ref_type == 'tag' }}
         uses: actions/attest@v4
@@ -92,6 +93,7 @@ jobs:
         with:
           name: ${{ github.job }}-${{ matrix.target }}
           path: artifacts/
+          retention-days: 3
       - name: Attest artifacts
         if: ${{ matrix.target == 'appimage' && github.ref_type == 'tag' }}
         uses: actions/attest@v4
@@ -180,6 +182,7 @@ jobs:
         with:
           name: ${{ env.OS }}
           path: artifacts/
+          retention-days: 3
       - name: Attest artifacts
         if: ${{ github.ref_type == 'tag' }}
         uses: actions/attest@v4
@@ -297,6 +300,7 @@ jobs:
         with:
           name: ${{ env.OS }}-${{ env.TARGET }}
           path: artifacts/
+          retention-days: 3
       - name: Attest artifacts
         if: ${{ github.ref_type == 'tag' }}
         uses: actions/attest@v4
@@ -379,6 +383,7 @@ jobs:
         with:
           name: ${{ env.OS }}-${{ env.TARGET }}
           path: src/android/app/artifacts/
+          retention-days: 3
       - name: Attest artifacts
         if: ${{ github.ref_type == 'tag' }}
         uses: actions/attest@v4
@@ -428,6 +433,7 @@ jobs:
         with:
           name: docker-${{ env.TARGET }}
           path: artifacts/
+          retention-days: 3
       - name: Attest artifacts
         if: ${{ github.ref_type == 'tag' }}
         uses: actions/attest@v4
