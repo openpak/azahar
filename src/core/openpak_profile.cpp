@@ -2,6 +2,7 @@
 #include "openpak_profile.h"
 
 #include <algorithm>
+#include <atomic>
 #include <cctype>
 #include <chrono>
 #include <cstdint>
@@ -10,6 +11,7 @@
 #include <fstream>
 #include <mutex>
 #include <sstream>
+#include <thread>
 
 #ifdef _WIN32
 #include <winsock2.h>
@@ -261,7 +263,16 @@ void ApplyStoredOrBuiltIn(const std::string& reason) {
 } // namespace
 
 void FetchAtLaunch() {
-    Refresh();
+    // Off the caller's thread (the UI thread, when a game boots): the compiled-in or
+    // last-known-good map applies until the answer lands, and one fetch at a time is enough.
+    static std::atomic<bool> in_flight{false};
+    if (in_flight.exchange(true)) {
+        return;
+    }
+    std::thread([] {
+        Refresh();
+        in_flight = false;
+    }).detach();
 }
 
 void Refresh() {
@@ -311,7 +322,7 @@ void Refresh() {
     LOG_INFO(Service_HTTP, "network profile: fetched v{} for {}", applied.version, kPlatform);
 }
 
-const Applied& Current() {
+Applied Current() {
     std::lock_guard lock(g_mutex);
     return g_applied;
 }

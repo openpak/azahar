@@ -1,14 +1,31 @@
 name: OpenPak release
 
-# Tag v1.2.3: a Linux x86_64 AppImage built with upstream's own container recipe,
-# attached to a GitHub Release. (Upstream's citra-build workflow does not run on this fork.)
+# Tag v1.2.3: Linux (AppImage, upstream's own container recipe), macOS, Windows and
+# Android builds on a GitHub Release. The release is created first and every build attaches its
+# own file, so a release never waits on workflow artifacts (the organisation's artifact quota
+# can be full). workflow_dispatch builds without publishing. (Upstream's citra-build workflow
+# does not run on this fork.)
 on:
   push:
     tags: ['v*.*.*']
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: Azahar ${{ github.ref_name }} (OpenPak)
+          generate_release_notes: true
+
   linux:
+    needs: [release]
+    if: always() && (needs.release.result == 'success' || needs.release.result == 'skipped')
     runs-on: ubuntu-latest
     container:
       image: opensauce04/azahar-build-environment:latest
@@ -16,8 +33,6 @@ jobs:
     env:
       OS: linux
       TARGET: appimage
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,12 +42,13 @@ jobs:
           mkdir -p artifacts
           for f in build/bundle/*.AppImage; do mv "$f" "artifacts/azahar-openpak-${GITHUB_REF_NAME}-linux-x86_64.AppImage"; done
           ls -la artifacts
-      - uses: actions/upload-artifact@v4
+      - if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
         with:
-          name: azahar-openpak-linux-x86_64
-          path: artifacts/
-          retention-days: 3
+          files: artifacts/*
   macos:
+    needs: [release]
+    if: always() && (needs.release.result == 'success' || needs.release.result == 'skipped')
     runs-on: macos-14
     env:
       OS: macos
@@ -46,12 +62,13 @@ jobs:
       - run: ./.ci/macos-universal.sh
       - run: |
           mkdir -p artifacts && cd build/universal/bundle && zip -r -y ../../../artifacts/azahar-openpak-${GITHUB_REF_NAME}-macos-universal.zip . && ls -la ../../../artifacts
-      - uses: actions/upload-artifact@v4
+      - if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
         with:
-          name: azahar-openpak-macos
-          path: artifacts/
-          retention-days: 3
+          files: artifacts/*
   windows:
+    needs: [release]
+    if: always() && (needs.release.result == 'success' || needs.release.result == 'skipped')
     runs-on: ubuntu-latest
     container:
       image: opensauce04/azahar-build-environment:latest
@@ -66,12 +83,13 @@ jobs:
       - run: ./.ci/mxe.sh
       - run: |
           mkdir -p artifacts && cd build/bundle && zip -r ../../artifacts/azahar-openpak-${GITHUB_REF_NAME}-windows-x86_64.zip . && ls -la ../../artifacts
-      - uses: actions/upload-artifact@v4
+      - if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
         with:
-          name: azahar-openpak-windows
-          path: artifacts/
-          retention-days: 3
+          files: artifacts/*
   android:
+    needs: [release]
+    if: always() && (needs.release.result == 'success' || needs.release.result == 'skipped')
     runs-on: ubuntu-latest
     env:
       OS: android
@@ -86,22 +104,7 @@ jobs:
       - run: JAVA_HOME=$JAVA_HOME_17_X64 ./.ci/android.sh
       - run: |
           mkdir -p artifacts && f=$(find src/android/app/build/outputs/apk -name '*.apk' | head -1) && cp "$f" artifacts/azahar-openpak-${GITHUB_REF_NAME}-android.apk && ls -la artifacts
-      - uses: actions/upload-artifact@v4
+      - if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
         with:
-          name: azahar-openpak-android
-          path: artifacts/
-          retention-days: 3
-  release:
-    needs: [linux, macos, windows, android]
-    if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          merge-multiple: true
-      - run: gh release create "${GITHUB_REF_NAME}" artifacts/* --repo "${GITHUB_REPOSITORY}" --title "Azahar ${GITHUB_REF_NAME} (OpenPak)" --generate-notes
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          files: artifacts/*
