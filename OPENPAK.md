@@ -1,7 +1,7 @@
 # Azahar for OpenPak
 
 Fork of upstream Azahar with one addition: a way to point the emulated console at OpenPak.
-Everything else is upstream, merged as it moves. Builds: `openpak-v*` tags publish a GitHub
+Everything else is upstream, merged as it moves. Builds: `vX.Y.Z` tags (`v*.*.*`) publish a GitHub
 Release (`.github/workflows/openpak_release.yml`). Not yet run against a game.
 
 A `use_openpak_network` setting (qt-config.ini, `[System]` block written next to
