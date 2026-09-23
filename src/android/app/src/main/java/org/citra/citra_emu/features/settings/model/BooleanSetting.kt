@@ -130,7 +130,10 @@ enum class BooleanSetting(
         Settings.SECTION_RENDERER,
         false
     ),
-    CHECK_FOR_UPDATES(SettingKeys.check_for_update_on_start(), Settings.SECTION_MISC, true);
+    CHECK_FOR_UPDATES(SettingKeys.check_for_update_on_start(), Settings.SECTION_MISC, true),
+    USE_OPENPAK_NETWORK(SettingKeys.use_openpak_network(), Settings.SECTION_OPENPAK, false),
+    OPENPAK_CLOUD_SYNC(SettingKeys.openpak_cloud_sync(), Settings.SECTION_OPENPAK, true),
+    OPENPAK_NOTIFICATIONS(SettingKeys.openpak_notifications(), Settings.SECTION_OPENPAK, true);
 
     override var boolean: Boolean = defaultValue
 
@@ -169,7 +172,8 @@ enum class BooleanSetting(
             ANDROID_HIDE_IMAGES,
             PERF_OVERLAY_ENABLE, // Works in overlay options, but not from the settings menu
             APPLY_REGION_FREE_PATCH,
-            EXPAND_TO_CUTOUT_AREA
+            EXPAND_TO_CUTOUT_AREA,
+            USE_OPENPAK_NETWORK // OpenPak: the connection switch waits until the game stops
         )
 
         fun from(key: String): BooleanSetting? =

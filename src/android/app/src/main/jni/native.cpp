@@ -51,6 +51,7 @@
 #include "jni/camera/ndk_camera.h"
 #include "jni/camera/still_image_camera.h"
 #include "jni/config.h"
+#include "jni/openpak_native.h"
 #include "network/announce_multiplayer_session.h"
 
 #ifdef ENABLE_OPENGL
@@ -211,6 +212,10 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
 
     Core::System& system{Core::System::GetInstance()};
 
+    // OpenPak: the newest cloud copy of the save comes down first (five seconds at most, Skip
+    // ends it sooner). Before the surface lock, so the UI thread stays free while it waits.
+    OpenPakNative::BeforeBoot(filepath);
+
     if (!inserted_cartridge.empty()) {
         system.InsertCartridge(inserted_cartridge);
     }
@@ -332,6 +337,9 @@ static Core::System::ResultStatus RunCitra(const std::string& filepath) {
     if (load_result != Core::System::ResultStatus::Success) {
         return load_result;
     }
+
+    // OpenPak: the title runs; say what the cloud pull did.
+    OpenPakNative::AfterBoot();
 
     stop_run = false;
     pause_emulation = false;
@@ -1056,6 +1064,8 @@ void Java_org_citra_citra_1emu_NativeLibrary_run__Ljava_lang_String_2(JNIEnv* en
     }
 
     const Core::System::ResultStatus result{RunCitra(path)};
+    // OpenPak: the core has shut down and the save is final; it goes up off this thread.
+    OpenPakNative::AfterShutdown();
     if (result != Core::System::ResultStatus::Success) {
         env->CallStaticVoidMethod(IDCache::GetNativeLibraryClass(),
                                   IDCache::GetExitEmulationActivity(), static_cast<int>(result));

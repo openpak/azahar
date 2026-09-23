@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.citra.citra_emu.databinding.FragmentSettingsBinding
 import org.citra.citra_emu.features.settings.model.AbstractSetting
+import org.citra.citra_emu.features.settings.model.Settings
 import org.citra.citra_emu.features.settings.model.view.SettingsItem
 
 class SettingsFragment :
@@ -59,6 +60,16 @@ class SettingsFragment :
         fragmentPresenter.onViewCreated(settingsAdapter!!)
 
         setInsets()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // The OpenPak rows say who is signed in; its screens may have changed that.
+        if (settingsAdapter != null &&
+            requireArguments().getString(ARGUMENT_MENU_TAG) == Settings.SECTION_OPENPAK
+        ) {
+            fragmentPresenter.loadSettingsList()
+        }
     }
 
     override fun onDetach() {

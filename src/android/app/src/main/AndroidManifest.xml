@@ -66,6 +66,12 @@
             android:label="@string/preferences_settings"/>
 
         <activity
+            android:name="org.citra.citra_emu.features.openpak.ui.OpenPakActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Citra.Main"
+            android:label="@string/openpak_menu_title"/>
+
+        <activity
             android:name="org.citra.citra_emu.activities.EmulationActivity"
             android:exported="true"
             android:theme="@style/Theme.Citra.Main"

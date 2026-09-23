@@ -64,7 +64,8 @@ class HomeSettingAdapter(
             this.option = option
 
             binding.optionTitle.text = activity.resources.getString(option.titleId)
-            binding.optionDescription.text = activity.resources.getString(option.descriptionId)
+            binding.optionDescription.text =
+                option.description?.invoke() ?: activity.resources.getString(option.descriptionId)
             binding.optionIcon.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     activity.resources,

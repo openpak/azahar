@@ -76,3 +76,24 @@ so, automatic sync for it pauses, and the Cloud saves page's *Resolve...* choose
 Server side: the OpenPak network (`account`, `nn-account`, `nn-friends`, `nn-nncs`, `nn-boss`,
 `nn-juxtaposition`, `nn-soap` for Wii U and 3DS; `nn-wfc` for Wii and DS) answers both the
 Nintendo names and the `openpak.org` names behind one TLS front.
+
+## Android
+
+The same structure and words in native Compose screens (`features/openpak`, UX spec §4), over a
+JNI bridge to openpak-client (`jni/openpak_native.cpp`):
+
+- **Entry points:** the first row of the home Settings tab ("OpenPak", who is signed in), an
+  OpenPak entry in the in-game drawer, and an OpenPak section in Settings: *Connect this emulator
+  to OpenPak* (`use_openpak_network`, no longer hidden on Android; not while a game runs), the
+  account row, *Open OpenPak*, cloud sync, *Show notifications*, *Refresh network settings*
+  with its status line. On Android these keys live in `config.ini` under `[OpenPak]`.
+- **Screens:** the OpenPak home (identity card or Sign in card, the seven sections), Account
+  with the 3DS identity, Friends (add, requests, remove, block), the Invitations and News
+  panels, Cloud saves with the conflict sheet, the Mods catalogue (no install yet), Status, a
+  full-screen sign-in and the one-time connect screen.
+- **Cloud saves around a run** as on desktop: pull before boot (five seconds, Skip), push after
+  the game stops. Results and friend events show as 6 s Snackbars; a friend request also posts
+  a notification on the "OpenPak" channel. The Google Play build has no all-files access, so it
+  lists cloud saves but cannot sync them.
+- The network profile is cached through FileUtil (the user folder is a storage-access path on
+  Android) and fetched with the phone's own public roots.
