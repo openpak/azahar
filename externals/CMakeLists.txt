@@ -525,3 +525,33 @@ else()
     target_compile_definitions(xxhash PRIVATE XXH_VECTOR=XXH_SCALAR)
     message(STATUS "Disabling SIMD for xxHash")
 endif()
+
+# OpenPak: the account, friends and cloud-save client library the OpenPak forks share, with its
+# Qt window and dialogs for the desktop frontend. It builds on what Azahar already bundles --
+# LibreSSL (or the system OpenSSL), cpp-httplib, fmt and nlohmann/json -- so one copy of each
+# ends up in the binary. Android (not the libretro core) takes the client half for its OpenPak
+# screens.
+if (ENABLE_QT OR (ANDROID AND NOT ENABLE_LIBRETRO))
+    if (NOT TARGET OpenSSL::SSL)
+        add_library(OpenSSL::SSL ALIAS ssl)
+    endif()
+    if (NOT TARGET OpenSSL::Crypto)
+        add_library(OpenSSL::Crypto ALIAS crypto)
+    endif()
+    if (NOT TARGET httplib::httplib)
+        add_library(httplib::httplib ALIAS httplib)
+    endif()
+    if (NOT TARGET nlohmann_json::nlohmann_json)
+        # The bundled header sits at json/json.hpp; the library includes <nlohmann/json.hpp>.
+        set(OPENPAK_JSON_SHIM "${CMAKE_CURRENT_BINARY_DIR}/openpak-json")
+        file(WRITE "${OPENPAK_JSON_SHIM}/nlohmann/json.hpp"
+             "#pragma once\n#include \"${CMAKE_CURRENT_SOURCE_DIR}/json/json.hpp\"\n")
+        add_library(openpak-json INTERFACE)
+        target_include_directories(openpak-json SYSTEM INTERFACE "${OPENPAK_JSON_SHIM}")
+        add_library(nlohmann_json::nlohmann_json ALIAS openpak-json)
+    endif()
+    set(OPENPAK_BUILD_QT ${ENABLE_QT} CACHE BOOL "" FORCE)
+    # The library's own tests are not Azahar's.
+    set(BUILD_TESTING OFF)
+    add_subdirectory(openpak-client EXCLUDE_FROM_ALL)
+endif()

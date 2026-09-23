@@ -262,6 +262,7 @@ private slots:
     void OnCIAInstallFinished();
     void OnMenuRecentFile();
     void OnConfigure();
+    void OnConfigureOpenPak();
     void OnLoadAmiibo();
     void OnRemoveAmiibo();
     void OnOpenCitraFolder();
@@ -382,6 +383,8 @@ private:
 
     // Whether emulation is currently running in Citra.
     bool emulation_running = false;
+    // OpenPak: the next Configure opens at the OpenPak tab.
+    bool configure_openpak_tab = false;
     std::unique_ptr<EmuThread> emu_thread;
     // The title of the game currently running
     QString game_title;

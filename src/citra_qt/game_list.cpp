@@ -2,6 +2,8 @@
 // Licensed under GPLv2 or any later version
 // Refer to the license.txt file included.
 
+#include <algorithm>
+#include <functional>
 #include <QActionGroup>
 #include <QApplication>
 #include <QDir>
@@ -1196,6 +1198,26 @@ void GameList::RemoveFavorite(u64 program_id) {
             return;
         }
     }
+}
+
+std::vector<std::pair<u64, QString>> GameList::ListGames() const {
+    std::vector<std::pair<u64, QString>> games;
+    std::function<void(const QStandardItem*)> walk = [&](const QStandardItem* item) {
+        if (item->type() == static_cast<int>(GameListItemType::Game)) {
+            const u64 id = item->data(GameListItemPath::ProgramIdRole).toULongLong();
+            const QString title = item->data(GameListItemPath::TitleRole).toString();
+            if (id != 0 && std::none_of(games.begin(), games.end(),
+                                        [id](const auto& game) { return game.first == id; })) {
+                games.emplace_back(id, title);
+            }
+            return;
+        }
+        for (int row = 0; row < item->rowCount(); ++row) {
+            walk(item->child(row, 0));
+        }
+    };
+    walk(item_model->invisibleRootItem());
+    return games;
 }
 
 QString GameList::FindGameByProgramID(u64 program_id, int role) {
