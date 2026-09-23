@@ -31,6 +31,7 @@ jobs:
         with:
           name: azahar-openpak-linux-x86_64
           path: artifacts/
+          retention-days: 3
   macos:
     runs-on: macos-14
     env:
@@ -49,6 +50,7 @@ jobs:
         with:
           name: azahar-openpak-macos
           path: artifacts/
+          retention-days: 3
   windows:
     runs-on: ubuntu-latest
     container:
@@ -68,6 +70,7 @@ jobs:
         with:
           name: azahar-openpak-windows
           path: artifacts/
+          retention-days: 3
   android:
     runs-on: ubuntu-latest
     env:
@@ -85,6 +88,7 @@ jobs:
         with:
           name: azahar-openpak-android
           path: artifacts/
+          retention-days: 3
   release:
     needs: [linux, macos, windows, android]
     if: startsWith(github.ref, 'refs/tags/openpak-v')

@@ -68,6 +68,7 @@ jobs:
           path: |
             ./*.zip
             ./*.spdx.json
+          retention-days: 3
       - name: Attest artifacts
         if: ${{ github.ref_type == 'tag' }}
         uses: actions/attest@v4
@@ -114,6 +115,7 @@ jobs:
           path: |
             ./*.zip
             ./*.spdx.json
+          retention-days: 3
       - name: Attest artifacts
         if: ${{ github.ref_type == 'tag' }}
         uses: actions/attest@v4
@@ -164,6 +166,7 @@ jobs:
           path: |
             ./*.zip
             ./*.spdx.json
+          retention-days: 3
       - name: Attest artifacts
         if: ${{ github.ref_type == 'tag' }}
         uses: actions/attest@v4
@@ -211,6 +214,7 @@ jobs:
           path: |
             ./*.zip
             ./*.spdx.json
+          retention-days: 3
       - name: Attest artifacts
         if: ${{ github.ref_type == 'tag' }}
         uses: actions/attest@v4
@@ -253,6 +257,7 @@ jobs:
           path: |
             ./*.zip
             ./*.spdx.json
+          retention-days: 3
       - name: Attest artifacts
         if: ${{ github.ref_type == 'tag' }}
         uses: actions/attest@v4
@@ -295,6 +300,7 @@ jobs:
           path: |
             ./*.zip
             ./*.spdx.json
+          retention-days: 3
       - name: Attest artifacts
         if: ${{ github.ref_type == 'tag' }}
         uses: actions/attest@v4
