@@ -253,6 +253,12 @@ if (ENABLE_QT)
         "screenshotPath"
         "calloutFlags"
         "showConsole"
+        "openpak_cloud_sync"
+        "openpak_notifications"
+        "openpak_notification_corner"
+        "openpak_website"
+        "openpak_device_name"
+        "openpak_connect_asked"
     )
         set(SETTING_KEY_LIST "${SETTING_KEY_LIST}\n\"${KEY}\",")
         set(SETTING_KEY_DEFINITIONS "${SETTING_KEY_DEFINITIONS}\nDEFINE_KEY(${KEY})")
@@ -277,6 +283,9 @@ if (ANDROID)
         "performance_overlay_position"
         "enable_secondary_display"
         "combo_button_buttons"
+        # OpenPak (the desktop keeps these under [UI] OpenPak in the Qt block)
+        "openpak_cloud_sync"
+        "openpak_notifications"
     )
         string(REPLACE "_" "_1" KEY_JNI_ESCAPED ${KEY})
         set(SETTING_KEY_LIST "${SETTING_KEY_LIST}\n\"${KEY}\",")

@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <utility>
+#include <vector>
+
 #include <QMenu>
 #include <QPushButton>
 #include <QString>
@@ -85,6 +88,8 @@ public:
     QStandardItemModel* GetModel() const;
 
     QString FindGameByProgramID(u64 program_id, int role);
+    // OpenPak: every game in the list, as program id and title (the OpenPak window's pickers).
+    std::vector<std::pair<u64, QString>> ListGames() const;
 
     void RefreshGameDirectory();
 
