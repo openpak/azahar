@@ -16,7 +16,9 @@
 #include "common/archives.h"
 #include "common/assert.h"
 #include "common/file_util.h"
+#include "common/scm_rev.h"
 #include "common/scope_exit.h"
+#include "common/settings.h"
 #include "common/string_util.h"
 #include "common/web_util.h"
 #include "core/core.h"
@@ -26,7 +28,6 @@
 #include "core/hle/kernel/ipc.h"
 #include "core/hle/romfs.h"
 #include "core/hle/service/fs/archive.h"
-#include "common/settings.h"
 #include "core/hle/service/http/http_c.h"
 #include "core/hw/aes/key.h"
 #include "core/openpak_profile.h"
@@ -400,8 +401,8 @@ void Context::MakeRequest() {
     // Apply URL replacements if any
     if (Settings::values.use_openpak_network.GetValue()) {
         // OpenPak: the applied network profile decides which names are answered on
-        // openpak.org (emulators/prds/emulator-network-profile-prd.md §4e). When nothing was fetched,
-        // the compiled-in map is the truth; when a profile is applied, names it marked
+        // openpak.org (emulators/prds/emulator-network-profile-prd.md §4e). When nothing was
+        // fetched, the compiled-in map is the truth; when a profile is applied, names it marked
         // `never` or did not claim are left alone.
         std::string mapped_host = OpenPakProfile::MapHost(url_info.host);
         if (!mapped_host.empty()) {
@@ -448,6 +449,15 @@ void Context::MakeRequest() {
 
     for (const auto& header : headers) {
         pending_headers.push_back(header);
+    }
+
+    // OpenPak: name the emulator to OpenPak's services (the NASC login the friends module
+    // makes, the NNAS calls), so the NEX token issued for Azahar is recorded as Azahar's and
+    // friends elsewhere read "on Azahar" rather than "on 3DS" for the same identity.
+    if (Settings::values.use_openpak_network.GetValue() &&
+        url_info.host.ends_with(".openpak.org")) {
+        pending_headers.push_back(Context::RequestHeader(
+            "X-OpenPak-Client", fmt::format("azahar/{}", Common::g_build_version)));
     }
 
     httplib::Params ascii_form;
