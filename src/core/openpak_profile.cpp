@@ -11,7 +11,12 @@
 #include <mutex>
 #include <sstream>
 
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#else
 #include <arpa/inet.h>
+#endif
 #include <fmt/format.h>
 #include <httplib.h>
 #include <json.hpp>
@@ -70,9 +75,8 @@ std::string ToLower(std::string s) {
 // whole profile.
 const std::vector<std::string>& AllowedFamilies() {
     static const std::vector<std::string> families{
-        ".nintendo.net",        ".nintendo.com",       ".nintendo.co.jp",
-        ".nintendowifi.net",    ".nintendo-europe.com", ".gamespy.com",
-        ".openpak.org",
+        ".nintendo.net",        ".nintendo.com", ".nintendo.co.jp", ".nintendowifi.net",
+        ".nintendo-europe.com", ".gamespy.com",  ".openpak.org",
     };
     return families;
 }
@@ -162,7 +166,8 @@ std::string Validate(const nlohmann::json& doc) {
                 return "services contains a malformed entry";
             std::string scheme, host;
             if (!SplitURL(entry["url"].get<std::string>(), scheme, host))
-                return fmt::format("service {} has an unparsable url", entry["id"].get<std::string>());
+                return fmt::format("service {} has an unparsable url",
+                                   entry["id"].get<std::string>());
             if (!NameAllowed(host))
                 return fmt::format("service {} points outside the families this emulator rewrites",
                                    entry["id"].get<std::string>());
@@ -191,7 +196,8 @@ Applied Parse(const nlohmann::json& doc) {
     return applied;
 }
 
-bool FetchOnce(const std::string& etag_sent, std::string& body, std::string& etag_out, long& status) {
+bool FetchOnce(const std::string& etag_sent, std::string& body, std::string& etag_out,
+               long& status) {
     // OPENPAK_API is honoured like the account API's base url: https, or loopback for a local
     // stack. TLS verification is never disabled — a profile that did not arrive over public
     // TLS from openpak.org is not a profile.
@@ -212,7 +218,8 @@ bool FetchOnce(const std::string& etag_sent, std::string& body, std::string& eta
     if (!etag_sent.empty())
         headers.emplace("If-None-Match", etag_sent);
 
-    auto result = client.Get(fmt::format("/api/v1/network/profile?platform={}", kPlatform), headers);
+    auto result =
+        client.Get(fmt::format("/api/v1/network/profile?platform={}", kPlatform), headers);
     if (!result)
         return false;
     status = result->status;
@@ -232,15 +239,17 @@ void ApplyStoredOrBuiltIn(const std::string& reason) {
                 applied.source = "cached";
                 std::lock_guard lock(g_mutex);
                 g_applied = std::move(applied);
-                LOG_INFO(Service_HTTP, "network profile: cached v{} in use ({})",
-                         g_applied.version, reason);
+                LOG_INFO(Service_HTTP, "network profile: cached v{} in use ({})", g_applied.version,
+                         reason);
                 return;
             }
-            LOG_WARNING(Service_HTTP, "network profile: stored profile rejected ({}); the "
-                                      "compiled-in map applies",
+            LOG_WARNING(Service_HTTP,
+                        "network profile: stored profile rejected ({}); the "
+                        "compiled-in map applies",
                         problem);
         } catch (const nlohmann::json::exception& e) {
-            LOG_WARNING(Service_HTTP, "network profile: stored profile does not parse ({})", e.what());
+            LOG_WARNING(Service_HTTP, "network profile: stored profile does not parse ({})",
+                        e.what());
         }
     }
     std::lock_guard lock(g_mutex);
@@ -322,9 +331,8 @@ std::string MapHost(const std::string& host) {
     // OpenPak measures OpenPak.
     for (const std::string& never : applied.never) {
         const size_t n = never.size();
-        if (name == never ||
-            (name.size() > n && name.compare(name.size() - n, n, never) == 0 &&
-             name[name.size() - n - 1] == '.'))
+        if (name == never || (name.size() > n && name.compare(name.size() - n, n, never) == 0 &&
+                              name[name.size() - n - 1] == '.'))
             return {};
     }
 
