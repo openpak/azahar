@@ -69,6 +69,7 @@ import org.citra.citra_emu.display.ScreenAdjustmentUtil
 import org.citra.citra_emu.display.ScreenLayout
 import org.citra.citra_emu.display.SecondaryDisplayLayout
 import org.citra.citra_emu.features.hotkeys.Hotkey
+import org.citra.citra_emu.features.openpak.ui.OpenPakActivity
 import org.citra.citra_emu.features.settings.model.BooleanSetting
 import org.citra.citra_emu.features.settings.model.IntSetting
 import org.citra.citra_emu.features.settings.model.SettingsViewModel
@@ -407,6 +408,11 @@ class EmulationFragment :
                         ""
                     )
 
+                    true
+                }
+
+                R.id.menu_openpak -> {
+                    OpenPakActivity.launch(requireContext(), OpenPakActivity.Screen.HOME)
                     true
                 }
 
