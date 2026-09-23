@@ -73,6 +73,7 @@
 #include "citra_qt/movie/movie_play_dialog.h"
 #include "citra_qt/movie/movie_record_dialog.h"
 #include "citra_qt/multiplayer/state.h"
+#include "citra_qt/openpak_host.h"
 #include "citra_qt/qt_image_interface.h"
 #include "citra_qt/qt_swizzle.h"
 #include "citra_qt/uisettings.h"
@@ -458,6 +459,15 @@ GMainWindow::GMainWindow(Core::System& system_)
     ConnectMenuEvents();
     ConnectWidgetEvents();
 
+    // OpenPak: its own menu, immediately left of Help, and the window, dialogs and toasts
+    // behind it (emulators/prds/openpak-ux-spec.md, 3DS family).
+    OpenPakQt::Init(this, OpenPakQt::Hooks{
+                              .game_running = [this] { return emulation_running; },
+                              .open_settings = [this] { OnConfigureOpenPak(); },
+                              .titles = [this] { return game_list->ListGames(); },
+                          });
+    OpenPakQt::AddMenu(ui->menubar);
+
     LOG_INFO(Frontend, "Azahar Version: {} | {}-{}", Common::g_build_fullname, Common::g_scm_branch,
              Common::g_scm_desc);
 #if CITRA_ARCH(x86_64)
@@ -537,6 +547,12 @@ GMainWindow::GMainWindow(Core::System& system_)
 
     if (!game_path.isEmpty()) {
         BootGame(game_path);
+    } else {
+        // OpenPak: the connect prompt, once per install, on a plain interactive launch.
+        QTimer::singleShot(0, this, [this] {
+            OpenPakQt::MaybeAskToConnect();
+            config->Save();
+        });
     }
 }
 
@@ -1537,6 +1553,11 @@ void GMainWindow::BootGame(const QString& filename) {
     game_list->SaveInterfaceLayout();
     config->Save();
 
+    // OpenPak: the newest cloud save before the game reads its own (five seconds at most).
+    if (!is_artic && Loader::ResultStatus::Success == res) {
+        OpenPakQt::BeforeBoot(title_id, {});
+    }
+
     if (!LoadROM(filename)) {
         render_window->ReleaseRenderTarget();
         secondary_window->ReleaseRenderTarget();
@@ -1716,6 +1737,8 @@ void GMainWindow::ShutdownGame() {
     UpdateWindowTitle();
 
     game_path.clear();
+    // OpenPak: the save is final now; it goes up off the UI thread.
+    OpenPakQt::AfterRun(game_title_id);
     game_title_id = 0;
 
     // Update the GUI
@@ -2970,11 +2993,19 @@ void GMainWindow::OnLoadState() {
     system.frame_limiter.AdvanceFrame();
 }
 
+void GMainWindow::OnConfigureOpenPak() {
+    configure_openpak_tab = true;
+    OnConfigure();
+}
+
 void GMainWindow::OnConfigure() {
     game_list->SetDirectoryWatcherEnabled(false);
     Settings::SetConfiguringGlobal(true);
     ConfigureDialog configureDialog(this, hotkey_registry, system, gl_renderer, physical_devices,
                                     !multiplayer_state->IsHostingPublicRoom());
+    if (std::exchange(configure_openpak_tab, false)) {
+        configureDialog.ShowOpenPakTab();
+    }
     connect(&configureDialog, &ConfigureDialog::LanguageChanged, this,
             &GMainWindow::OnLanguageChanged);
     auto old_theme = UISettings::values.theme;
@@ -4040,6 +4071,8 @@ void GMainWindow::closeEvent(QCloseEvent* event) {
     if (emu_thread) {
         ShutdownGame();
     }
+    // OpenPak: a save still going up gets to arrive.
+    OpenPakQt::FinishPending();
 
     // Save settings in case they were changed from outside the configuration menu.
     config->Save();
