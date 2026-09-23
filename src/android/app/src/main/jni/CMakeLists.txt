@@ -28,12 +28,19 @@ add_library(citra-android SHARED
     native.cpp
     ndk_motion.cpp
     ndk_motion.h
+    openpak_native.cpp
+    openpak_native.h
     system_save_game.cpp
     native_log.cpp
 )
 
 target_link_libraries(citra-android PRIVATE audio_core citra_common citra_core input_common network)
 target_link_libraries(citra-android PRIVATE android camera2ndk inih jnigraphics log mediandk yuv)
+
+# OpenPak: the account, friends and cloud-save client (externals/openpak-client). It throws and
+# catches; the bridge catches what reaches it.
+target_link_libraries(citra-android PRIVATE openpak::client)
+set_source_files_properties(openpak_native.cpp PROPERTIES COMPILE_OPTIONS -fexceptions)
 
 if (ENABLE_OPENGL)
     target_sources(citra-android PRIVATE

@@ -47,25 +47,44 @@ std::filesystem::path EtagPath() {
            "openpak_network_profile.etag";
 }
 
+// Through FileUtil, which also reaches the user folder on Android (a storage-access path there,
+// not one std::filesystem can open).
 std::string ReadFile(const std::filesystem::path& path) {
-    std::error_code ec;
-    if (!std::filesystem::exists(path, ec))
+    std::string contents;
+    if (!FileUtil::Exists(path.string()))
         return {};
-    std::ifstream file(path, std::ios::binary);
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    return buffer.str();
+    FileUtil::ReadFileToString(false, path.string(), contents);
+    return contents;
 }
 
 bool WriteFile(const std::filesystem::path& path, const std::string& contents) {
-    std::error_code ec;
-    std::filesystem::create_directories(path.parent_path(), ec);
-    std::ofstream file(path, std::ios::binary | std::ios::trunc);
-    if (!file)
-        return false;
-    file.write(contents.data(), static_cast<std::streamsize>(contents.size()));
-    return static_cast<bool>(file);
+    FileUtil::CreateFullPath(path.string());
+    return FileUtil::WriteStringToFile(false, path.string(), contents) == contents.size();
 }
+
+#ifdef __ANDROID__
+// The bundled TLS library has no root store on a phone: the system's public roots, read once.
+const std::string& AndroidRoots() {
+    static const std::string roots = [] {
+        std::string pem;
+        for (const char* dir :
+             {"/apex/com.android.conscrypt/cacerts", "/system/etc/security/cacerts"}) {
+            std::error_code ec;
+            for (const auto& entry : std::filesystem::directory_iterator(dir, ec)) {
+                std::ifstream file(entry.path(), std::ios::binary);
+                std::stringstream buffer;
+                buffer << file.rdbuf();
+                pem += buffer.str();
+                pem += '\n';
+            }
+            if (!pem.empty())
+                break;
+        }
+        return pem;
+    }();
+    return roots;
+}
+#endif
 
 std::string ToLower(std::string s) {
     std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
@@ -212,6 +231,9 @@ bool FetchOnce(const std::string& etag_sent, std::string& body, std::string& eta
     }
 
     httplib::Client client(base);
+#ifdef __ANDROID__
+    client.load_ca_cert_store(AndroidRoots().data(), AndroidRoots().size());
+#endif
     client.set_connection_timeout(kTimeout);
     client.set_read_timeout(kTimeout);
     client.set_follow_location(false);

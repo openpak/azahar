@@ -113,6 +113,7 @@ class Settings {
         const val SECTION_PERFORMANCE_OVERLAY = "Performance Overlay"
         const val SECTION_STORAGE = "Storage"
         const val SECTION_MISC = "Miscellaneous"
+        const val SECTION_OPENPAK = "OpenPak"
 
         const val KEY_BUTTON_A = "button_a"
         const val KEY_BUTTON_B = "button_b"
@@ -250,7 +251,8 @@ class Settings {
                     SECTION_UTILITY,
                     SECTION_AUDIO,
                     SECTION_DEBUG,
-                    SECTION_MISC
+                    SECTION_MISC,
+                    SECTION_OPENPAK
                 )
         }
     }

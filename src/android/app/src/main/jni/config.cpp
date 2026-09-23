@@ -24,6 +24,7 @@
 #include "jni/config.h"
 #include "jni/default_ini.h"
 #include "jni/input_manager.h"
+#include "jni/openpak_native.h"
 
 Config::Config() {
     // TODO: Don't hardcode the path; let the frontend decide where to put the config files.
@@ -331,6 +332,12 @@ void Config::ReadValues() {
     // Web Service
     ReadSetting("WebService", Settings::values.web_api_url);
     ReadSetting("WebService", Settings::values.network_token);
+
+    // OpenPak
+    ReadSetting("OpenPak", Settings::values.use_openpak_network);
+    OpenPakNative::SetOptions(
+        android_config->GetBoolean("OpenPak", Settings::Keys::openpak_cloud_sync, true),
+        android_config->GetBoolean("OpenPak", Settings::Keys::openpak_notifications, true));
 }
 
 void Config::Reload() {

@@ -32,6 +32,8 @@ import org.citra.citra_emu.R
 import org.citra.citra_emu.adapters.HomeSettingAdapter
 import org.citra.citra_emu.databinding.DialogSoftwareKeyboardBinding
 import org.citra.citra_emu.databinding.FragmentHomeSettingsBinding
+import org.citra.citra_emu.features.openpak.model.OpenPak
+import org.citra.citra_emu.features.openpak.ui.OpenPakActivity
 import org.citra.citra_emu.features.settings.SettingKeys
 import org.citra.citra_emu.features.settings.model.Settings
 import org.citra.citra_emu.features.settings.ui.SettingsActivity
@@ -77,6 +79,14 @@ class HomeSettingsFragment : Fragment() {
         mainActivity = requireActivity() as MainActivity
 
         val optionsList = listOf(
+            // OpenPak first (openpak-ux-spec §4.1): who is signed in, and the way to its screens.
+            HomeSetting(
+                R.string.openpak_menu_title,
+                R.string.openpak_status_signed_out,
+                R.drawable.ic_openpak,
+                { OpenPakActivity.launch(requireContext(), OpenPakActivity.Screen.HOME) },
+                description = { OpenPak.accountLine(requireContext()) }
+            ),
             HomeSetting(
                 R.string.grid_menu_core_settings,
                 R.string.settings_description,
@@ -217,6 +227,8 @@ class HomeSettingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        // The OpenPak row says who is signed in; its screens may have changed that.
+        binding.homeSettingsList.adapter?.notifyItemChanged(0)
         exitTransition = null
         homeViewModel.setNavigationVisibility(visible = true, animated = true)
         homeViewModel.setStatusBarShadeVisibility(visible = true)
