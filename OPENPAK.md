@@ -3,7 +3,7 @@
 Fork of upstream Azahar with two additions: a way to point the emulated console at OpenPak, and
 the OpenPak menu, window and settings every OpenPak emulator shares
 (`emulators/prds/openpak-ux-spec.md`, 3DS family). Everything else is upstream, merged as it
-moves. Builds: `openpak-v*` tags publish a GitHub Release
+moves. Builds: `vX.Y.Z` tags (`v*.*.*`) publish a GitHub Release
 (`.github/workflows/openpak_release.yml`; the release is created first and each build attaches
 its own file). Not yet run against a game.
 
