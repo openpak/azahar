@@ -101,6 +101,16 @@ struct Values {
 
     Settings::Setting<std::string> inserted_cartridge{"", Settings::Keys::inserted_cartridge};
 
+    // OpenPak (Configure -> OpenPak; the connection switch itself is use_openpak_network)
+    Settings::Setting<bool> openpak_cloud_sync{true, Settings::Keys::openpak_cloud_sync};
+    Settings::Setting<bool> openpak_notifications{true, Settings::Keys::openpak_notifications};
+    // Bottom right, Bottom left, Top right, Top left
+    Settings::Setting<int> openpak_notification_corner{0,
+                                                       Settings::Keys::openpak_notification_corner};
+    Settings::Setting<std::string> openpak_website{"", Settings::Keys::openpak_website};
+    Settings::Setting<std::string> openpak_device_name{"", Settings::Keys::openpak_device_name};
+    Settings::Setting<bool> openpak_connect_asked{false, Settings::Keys::openpak_connect_asked};
+
 #ifdef ENABLE_DISCORD_RPC
     // Discord RPC
     Settings::Setting<bool> enable_discord_presence{true, Settings::Keys::enable_discord_presence};

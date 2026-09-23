@@ -853,6 +853,15 @@ void QtConfig::ReadUIValues() {
         ReadShortcutValues();
         ReadMultiplayerValues();
 
+        qt_config->beginGroup(QStringLiteral("OpenPak"));
+        ReadBasicSetting(UISettings::values.openpak_cloud_sync);
+        ReadBasicSetting(UISettings::values.openpak_notifications);
+        ReadBasicSetting(UISettings::values.openpak_notification_corner);
+        ReadBasicSetting(UISettings::values.openpak_website);
+        ReadBasicSetting(UISettings::values.openpak_device_name);
+        ReadBasicSetting(UISettings::values.openpak_connect_asked);
+        qt_config->endGroup();
+
         ReadBasicSetting(UISettings::values.single_window_mode);
         ReadBasicSetting(UISettings::values.fullscreen);
         ReadBasicSetting(UISettings::values.display_titlebar);
@@ -1388,6 +1397,15 @@ void QtConfig::SaveUIValues() {
         SaveUIGameListValues();
         SaveShortcutValues();
         SaveMultiplayerValues();
+
+        qt_config->beginGroup(QStringLiteral("OpenPak"));
+        WriteBasicSetting(UISettings::values.openpak_cloud_sync);
+        WriteBasicSetting(UISettings::values.openpak_notifications);
+        WriteBasicSetting(UISettings::values.openpak_notification_corner);
+        WriteBasicSetting(UISettings::values.openpak_website);
+        WriteBasicSetting(UISettings::values.openpak_device_name);
+        WriteBasicSetting(UISettings::values.openpak_connect_asked);
+        qt_config->endGroup();
 
         WriteBasicSetting(UISettings::values.single_window_mode);
         WriteBasicSetting(UISettings::values.fullscreen);

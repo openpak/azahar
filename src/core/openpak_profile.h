@@ -20,14 +20,16 @@ struct Applied {
 
 // §2: one conditional GET with the stored ETag, two-second timeout, single attempt. Validated
 // against the compiled-in families before anything is applied; a rejected profile is a log
-// line and a fallback.
+// line and a fallback. Returns at once: the request runs on its own thread, and a second call
+// while one is in flight does nothing.
 void FetchAtLaunch();
 
-// The "Refresh network settings" action: same flow, safe to ask while the emulator runs.
+// The "Refresh network settings" action: the same flow, blocking (network) -- call it off the
+// UI thread. Safe to ask while the emulator runs.
 void Refresh();
 
 // The applied profile (or the compiled-in default when nothing has been fetched).
-const Applied& Current();
+Applied Current();
 
 // The §4e rewrite: a Nintendo name under an applied family becomes the same name on
 // openpak.org; a name in `never` comes back untouched; an unapplied or unmatched host comes

@@ -32,6 +32,7 @@ class ConfigureCamera;
 class ConfigureDebug;
 class ConfigureStorage;
 class ConfigureWeb;
+class ConfigureOpenPak;
 class ConfigureUi;
 
 class ConfigureDialog : public QDialog {
@@ -44,6 +45,8 @@ public:
     ~ConfigureDialog() override;
 
     void ApplyConfiguration();
+    // Shows the OpenPak tab (the OpenPak menu's "OpenPak settings...").
+    void ShowOpenPakTab();
 
 private slots:
     void OnLanguageChanged(const QString& locale);
@@ -75,5 +78,6 @@ private:
     std::unique_ptr<ConfigureDebug> debug_tab;
     std::unique_ptr<ConfigureStorage> storage_tab;
     std::unique_ptr<ConfigureWeb> web_tab;
+    std::unique_ptr<ConfigureOpenPak> openpak_tab;
     std::unique_ptr<ConfigureUi> ui_tab;
 };
