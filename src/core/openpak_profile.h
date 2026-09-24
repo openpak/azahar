@@ -4,6 +4,7 @@
 // the compiled-in map beats nothing.
 #pragma once
 
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -18,9 +19,22 @@ struct Applied {
     std::vector<std::string> never;        // names that must reach the real internet untouched
 };
 
-// §2: one conditional GET with the stored ETag, two-second timeout, single attempt. Validated
-// against the compiled-in families before anything is applied; a rejected profile is a log
-// line and a fallback. Returns at once: the request runs on its own thread, and a second call
+// What the frontend's OpenPak client library supplies (docs/signed-ceiling.md). citra_qt links
+// the library and sets these at startup; a build without it (the libretro core, Android) keeps
+// the frozen compiled-in families as its ceiling.
+struct ClientHooks {
+    // The 3DS families of the verified ceiling: the profile's names are kept only inside them.
+    std::function<std::vector<std::string>()> families;
+    // On the fetch thread, before the profile request: refresh the signed ceiling.
+    std::function<void()> before_fetch;
+    // After a profile is applied: its JSON body, or empty when the compiled-in map applies.
+    std::function<void(const std::string& body)> applied;
+};
+void SetClientHooks(ClientHooks hooks);
+
+// §2: one conditional GET with the stored ETag, two-second timeout, single attempt. A malformed
+// profile is a log line and a fallback; a name outside the ceiling is dropped on its own, logged,
+// and the rest applies. Returns at once: the request runs on its own thread, and a second call
 // while one is in flight does nothing.
 void FetchAtLaunch();
 
