@@ -37,6 +37,7 @@
 
 #include <openpak/account.h>
 #include <openpak/api.h>
+#include <openpak/network_profile.h>
 #include <openpak/platform.h>
 #include <openpak/qt/account_dialog.h>
 #include <openpak/qt/avatar_cache.h>
@@ -276,6 +277,7 @@ public:
     openpak::qt::Navigation* CreateNavigation(QObject*) override {
         return nullptr;
     }
+    void NetworkRedirectsChanged() override;
 
     void AccountChanged(bool linked) {
         if (linked) {
@@ -306,6 +308,13 @@ void Toast(const QString& text, Kind kind) {
             }
         },
         Qt::QueuedConnection);
+}
+
+// OpenPak changed the 3DS redirects while Azahar runs. The core fetches the profile each time a
+// game boots, so the next game started picks them up.
+void AzaharHost::NetworkRedirectsChanged() {
+    Toast(openpak::qt::RedirectsChangedText(openpak::qt::RedirectsApplied::AtGameStart),
+          Kind::Account);
 }
 
 QString NameOf(u64 title_id) {
@@ -420,6 +429,26 @@ void Init(QMainWindow* window, Hooks hooks) {
     g_host->main_window = window;
     g_host->hooks = std::move(hooks);
     openpak::qt::Host::SetCurrent(g_host);
+    // The core fetches the profile itself; the client library is the ceiling it is filtered
+    // through, and the one that watches for a change (docs/signed-ceiling.md).
+    OpenPakProfile::SetClientHooks({
+        .families = [] { return openpak::NetworkProfile::CurrentCeiling().FamiliesFor("3ds"); },
+        .before_fetch = [] { openpak::NetworkProfile::RefreshCeiling(); },
+        .applied =
+            [](const std::string& body) {
+                openpak::NetworkProfile::Profile profile;
+                std::string error;
+                if (auto parsed = openpak::NetworkProfile::Parse(body, error);
+                    parsed && !body.empty()) {
+                    profile = std::move(*parsed);
+                }
+                openpak::NetworkProfile::FilterToCeiling(
+                    profile, openpak::NetworkProfile::CurrentCeiling().FamiliesFor("3ds"), false);
+                openpak::NetworkProfile::SetDigestInUse(
+                    openpak::NetworkProfile::EffectiveDigest(profile));
+                openpak::NetworkProfile::StartWatching("3ds");
+            },
+    });
     g_toast = new NextendoToast(window);
     QObject::connect(g_toast, &NextendoToast::clicked, g_host, [](NextendoToast::Kind kind) {
         QWidget* parent = g_host->main_window;
