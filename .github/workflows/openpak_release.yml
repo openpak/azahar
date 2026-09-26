@@ -16,7 +16,7 @@ permissions:
 jobs:
   release:
     if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: softprops/action-gh-release@v2
         with:
@@ -26,7 +26,7 @@ jobs:
   linux:
     needs: [release]
     if: always() && (needs.release.result == 'success' || needs.release.result == 'skipped')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: opensauce04/azahar-build-environment:latest
       options: -u 1001
@@ -34,7 +34,7 @@ jobs:
       OS: linux
       TARGET: appimage
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
           # openpak-client is private: GITHUB_TOKEN reads only this repo.
@@ -55,7 +55,7 @@ jobs:
     env:
       OS: macos
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
           # openpak-client is private: GITHUB_TOKEN reads only this repo.
@@ -73,7 +73,7 @@ jobs:
   windows:
     needs: [release]
     if: always() && (needs.release.result == 'success' || needs.release.result == 'skipped')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container:
       image: opensauce04/azahar-build-environment:latest
       options: -u 1001
@@ -81,7 +81,7 @@ jobs:
       OS: windows
       TARGET: mxe
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
           # openpak-client is private: GITHUB_TOKEN reads only this repo.
@@ -96,12 +96,12 @@ jobs:
   android:
     needs: [release]
     if: always() && (needs.release.result == 'success' || needs.release.result == 'skipped')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       OS: android
       TARGET: vanilla
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
           # openpak-client is private: GITHUB_TOKEN reads only this repo.
