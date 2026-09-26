@@ -10,6 +10,9 @@
 #include <tuple>
 #include <unordered_map>
 #include <boost/algorithm/string/replace.hpp>
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
 #include <cryptopp/aes.h>
 #include <cryptopp/modes.h>
 #include <fmt/format.h>
@@ -456,8 +459,23 @@ void Context::MakeRequest() {
     // friends elsewhere read "on Azahar" rather than "on 3DS" for the same identity.
     if (Settings::values.use_openpak_network.GetValue() &&
         url_info.host.ends_with(".openpak.org")) {
+        // "azahar/<version> (<os>)", the OS picked at compile time; no suffix on any platform
+        // outside the five OpenPak knows. Same string openpak-client builds for the desktop.
+#if defined(__ANDROID__)
+        constexpr const char* openpak_os = " (android)";
+#elif defined(_WIN32)
+        constexpr const char* openpak_os = " (windows)";
+#elif defined(__APPLE__) && TARGET_OS_IPHONE
+        constexpr const char* openpak_os = " (ios)";
+#elif defined(__APPLE__)
+        constexpr const char* openpak_os = " (macos)";
+#elif defined(__linux__)
+        constexpr const char* openpak_os = " (linux)";
+#else
+        constexpr const char* openpak_os = "";
+#endif
         pending_headers.push_back(Context::RequestHeader(
-            "X-OpenPak-Client", fmt::format("azahar/{}", Common::g_build_version)));
+            "X-OpenPak-Client", fmt::format("azahar/{}{}", Common::g_build_version, openpak_os)));
     }
 
     httplib::Params ascii_form;
