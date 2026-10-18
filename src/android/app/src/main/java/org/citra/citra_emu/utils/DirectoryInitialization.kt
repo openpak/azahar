@@ -14,6 +14,7 @@ import java.io.OutputStream
 import java.util.concurrent.atomic.AtomicBoolean
 import org.citra.citra_emu.CitraApplication
 import org.citra.citra_emu.NativeLibrary
+import org.citra.citra_emu.features.openpak.model.OpenPak
 import org.citra.citra_emu.utils.PermissionsHandler.hasWriteAccess
 
 /**
@@ -53,6 +54,10 @@ object DirectoryInitialization {
             } else {
                 DirectoryInitializationState.EXTERNAL_STORAGE_PERMISSION_NEEDED
             }
+        }
+        if (directoryState == DirectoryInitializationState.CITRA_DIRECTORIES_INITIALIZED) {
+            // OpenPak: the client's directories, and the network profile fetch when it is on.
+            OpenPak.init(context)
         }
         isCitraDirectoryInitializationRunning.set(false)
         return directoryState

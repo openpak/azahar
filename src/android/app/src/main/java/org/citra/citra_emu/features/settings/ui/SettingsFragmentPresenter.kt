@@ -12,14 +12,19 @@ import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.os.Build
 import android.text.TextUtils
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 import org.citra.citra_emu.BuildConfig
 import org.citra.citra_emu.CitraApplication
 import org.citra.citra_emu.R
 import org.citra.citra_emu.display.ScreenLayout
 import org.citra.citra_emu.display.StereoMode
 import org.citra.citra_emu.display.StereoWhichDisplay
+import org.citra.citra_emu.features.openpak.model.OpenPak
+import org.citra.citra_emu.features.openpak.ui.OpenPakActivity
+import org.citra.citra_emu.features.openpak.ui.OpenPakUi
 import org.citra.citra_emu.features.settings.model.AbstractBooleanSetting
 import org.citra.citra_emu.features.settings.model.AbstractIntSetting
 import org.citra.citra_emu.features.settings.model.AbstractSetting
@@ -123,6 +128,8 @@ class SettingsFragmentPresenter(private val fragmentView: SettingsFragmentView) 
 
             Settings.SECTION_PERFORMANCE_OVERLAY -> addPerformanceOverlaySettings(sl)
 
+            Settings.SECTION_OPENPAK -> addOpenPakSettings(sl)
+
             else -> {
                 fragmentView.showToastMessage("Unimplemented menu", false)
                 return
@@ -206,6 +213,15 @@ class SettingsFragmentPresenter(private val fragmentView: SettingsFragmentView) 
                     0,
                     R.drawable.ic_network,
                     Settings.SECTION_NETWORK
+                )
+            )
+            // OpenPak's section, after Network (openpak-ux-spec §3.13, §4.1).
+            add(
+                SubmenuSetting(
+                    R.string.openpak_settings_section,
+                    0,
+                    R.drawable.ic_openpak,
+                    Settings.SECTION_OPENPAK
                 )
             )
             add(
@@ -1786,6 +1802,108 @@ class SettingsFragmentPresenter(private val fragmentView: SettingsFragmentView) 
             )
         }
     }
+
+    /**
+     * The OpenPak section of openpak-ux-spec §3.13 as preference rows (§4.1), 3DS family: the
+     * connection switch (use_openpak_network, not while a game runs), the account row, Open
+     * OpenPak, cloud sync, Show notifications, and Refresh network settings with its status line.
+     * No notification corner on Android (§4.3).
+     */
+    private fun addOpenPakSettings(sl: ArrayList<SettingsItem>) {
+        settingsActivity.setToolbarTitle(
+            settingsActivity.getString(R.string.openpak_settings_section)
+        )
+        val state = OpenPak.state()
+        sl.apply {
+            add(HeaderSetting(R.string.openpak_settings_account))
+            add(
+                SwitchSetting(
+                    BooleanSetting.USE_OPENPAK_NETWORK,
+                    R.string.openpak_settings_enable,
+                    R.string.openpak_settings_enable_tip,
+                    BooleanSetting.USE_OPENPAK_NETWORK.key,
+                    BooleanSetting.USE_OPENPAK_NETWORK.defaultValue
+                )
+            )
+            add(
+                RunnableSetting(
+                    if (state.signedIn) {
+                        R.string.openpak_menu_sign_out
+                    } else {
+                        R.string.openpak_common_sign_in_button
+                    },
+                    0,
+                    false,
+                    0,
+                    {
+                        if (state.signedIn) {
+                            OpenPakUi.confirmSignOut(settingsActivity) { loadSettingsList() }
+                        } else {
+                            OpenPakActivity.launch(
+                                settingsActivity,
+                                OpenPakActivity.Screen.SIGN_IN
+                            )
+                        }
+                    },
+                    value = { OpenPak.accountLine(settingsActivity) }
+                )
+            )
+            add(
+                RunnableSetting(
+                    R.string.openpak_settings_open,
+                    0,
+                    true,
+                    R.drawable.ic_openpak,
+                    { OpenPakActivity.launch(settingsActivity, OpenPakActivity.Screen.HOME) }
+                )
+            )
+            add(
+                SwitchSetting(
+                    BooleanSetting.OPENPAK_CLOUD_SYNC,
+                    R.string.openpak_settings_cloud_sync,
+                    0,
+                    BooleanSetting.OPENPAK_CLOUD_SYNC.key,
+                    BooleanSetting.OPENPAK_CLOUD_SYNC.defaultValue
+                )
+            )
+
+            add(HeaderSetting(R.string.openpak_settings_notifications_heading))
+            add(
+                SwitchSetting(
+                    BooleanSetting.OPENPAK_NOTIFICATIONS,
+                    R.string.openpak_settings_notifications,
+                    0,
+                    BooleanSetting.OPENPAK_NOTIFICATIONS.key,
+                    BooleanSetting.OPENPAK_NOTIFICATIONS.defaultValue
+                )
+            )
+
+            add(HeaderSetting(R.string.openpak_settings_advanced))
+            add(
+                RunnableSetting(
+                    R.string.openpak_settings_refresh_network,
+                    0,
+                    true,
+                    0,
+                    {
+                        // Off the UI thread (§5.2); the status line updates when it answers.
+                        settingsActivity.lifecycleScope.launch {
+                            openPakNetworkSummary = OpenPak.refreshNetwork(settingsActivity)
+                            if (menuTag == Settings.SECTION_OPENPAK) loadSettingsList()
+                        }
+                    },
+                    value = {
+                        settingsActivity.getString(
+                            R.string.openpak_settings_network_status,
+                            openPakNetworkSummary ?: OpenPak.networkSummary(settingsActivity)
+                        )
+                    }
+                )
+            )
+        }
+    }
+
+    private var openPakNetworkSummary: String? = null
 
     private fun addNetworkSettings(sl: ArrayList<SettingsItem>) {
         settingsActivity.setToolbarTitle(settingsActivity.getString(R.string.preferences_network))
