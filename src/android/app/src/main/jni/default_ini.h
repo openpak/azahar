@@ -14,7 +14,6 @@ namespace DefaultINI {
 constexpr std::array android_config_omitted_keys = {
     Settings::Keys::enable_gamemode,
     Settings::Keys::use_custom_storage,
-    Settings::Keys::use_openpak_network,
     Settings::Keys::init_time_offset,
     Settings::Keys::physical_device,
     Settings::Keys::use_gles, // Niche
@@ -551,6 +550,20 @@ static const char* android_config_default_file_content = (BOOST_HANA_STRING(R"(
 # Which update channel should be used by the update checker
 # 0 (default): Stable, 1: Prerelease
 )") DECLARE_KEY(update_check_channel) BOOST_HANA_STRING(R"(
+
+[OpenPak]
+# Connect this emulator to OpenPak: the Nintendo Network names the system asks for are answered
+# by openpak.org. When off the emulator behaves exactly as upstream does.
+# 0 (default): No, 1: Yes
+)") DECLARE_KEY(use_openpak_network) BOOST_HANA_STRING(R"(
+
+# Sync cloud saves automatically when a game starts and stops (needs an OpenPak sign-in)
+# 0: No, 1 (default): Yes
+)") DECLARE_KEY(openpak_cloud_sync) BOOST_HANA_STRING(R"(
+
+# Show OpenPak notifications (cloud saves, friends)
+# 0: No, 1 (default): Yes
+)") DECLARE_KEY(openpak_notifications) BOOST_HANA_STRING(R"(
 
 [Debugging]
 # Record frame time data, can be found in the log directory. Boolean value

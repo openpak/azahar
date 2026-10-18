@@ -48,6 +48,7 @@ import org.citra.citra_emu.R
 import org.citra.citra_emu.contracts.OpenFileResultContract
 import org.citra.citra_emu.databinding.ActivityMainBinding
 import org.citra.citra_emu.dialogs.NetPlayDialog
+import org.citra.citra_emu.features.openpak.ui.OpenPakUi
 import org.citra.citra_emu.features.settings.model.Settings
 import org.citra.citra_emu.features.settings.model.SettingsViewModel
 import org.citra.citra_emu.features.settings.ui.SettingsActivity
@@ -282,14 +283,25 @@ class MainActivity :
                 if (NativeLibrary.getUserDirectory() == "") {
                     SelectUserDirectoryDialogFragment.newInstance(this)
                         .show(supportFragmentManager, SelectUserDirectoryDialogFragment.TAG)
+                    return
                 }
             }
+        }
+
+        // OpenPak: once per install, after the first-time setup, the connect screen (§3.2); and
+        // once per run, whether the stored sign-in still holds (§3.10, never a prompt).
+        if (DirectoryInitialization.areCitraDirectoriesReady()) {
+            OpenPakUi.maybeShowConnect(this)
+            OpenPakUi.checkStoredSignIn(this)
         }
     }
 
     fun finishSetup(navController: NavController) {
         navController.navigate(R.id.action_firstTimeSetupFragment_to_gamesFragment)
         (binding.navigationView as NavigationBarView).setupWithNavController(navController)
+        if (DirectoryInitialization.areCitraDirectoriesReady()) {
+            OpenPakUi.maybeShowConnect(this)
+        }
     }
 
     private fun setUpNavigation(savedInstanceState: Bundle?, navController: NavController) {
